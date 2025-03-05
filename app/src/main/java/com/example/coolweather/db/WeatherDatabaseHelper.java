@@ -23,12 +23,14 @@ public class WeatherDatabaseHelper extends SQLiteOpenHelper {
             "province_id INTEGER, " +
             "FOREIGN KEY(province_id) REFERENCES Province(id))";
 
-    public static final String CREATE_COUNTY = "CREATE TABLE County (" +
-            "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            "county_name TEXT, " +
-            "county_code INTEGER, " +
-            "city_id INTEGER, " +
-            "FOREIGN KEY(city_id) REFERENCES City(id))";
+    public static final String CREATE_COUNTY = "CREATE TABLE County (" + // 创建一个名为County的表。
+            "id INTEGER PRIMARY KEY AUTOINCREMENT, " + // 创建一个名为id的整型主键列，自动递增。
+            "county_name TEXT, " + // 创建一个名为county_name的文本列，用于存储县级行政区名称。
+            "county_code INTEGER, " + // 创建一个名为county_code的整型列，用于存储县级行政区代码。
+            "weather_id TEXT, " +  // 确保有这个字段
+            "city_id INTEGER, " + // 创建一个名为city_id的整型列，用于存储城市ID。
+            "FOREIGN KEY(city_id) REFERENCES City(id))"; // 创建一个外键约束，
+    // 确保county表中的city_id值必须存在于city表中的id列中。
 
     public WeatherDatabaseHelper(@Nullable Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

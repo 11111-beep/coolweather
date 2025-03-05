@@ -3,6 +3,7 @@ package com.example.coolweather;
 import android.annotation.SuppressLint;
 import android.app.Fragment;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -81,6 +82,13 @@ public class ChooseAreaFragment extends Fragment {
                 } else if (currentLevel == LEVEL_CITY) {
                     selectedCity = cityList.get(position);
                     queryCounties();
+                } else if (currentLevel == LEVEL_COUNTY) {
+                    String weatherId = countyList.get(position).getWeatherId();
+                    Log.d(TAG, "8888888888888888888888888888Sending Weather ID: " + weatherId);
+                    Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                    intent.putExtra("weather_id", weatherId);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });
@@ -173,14 +181,16 @@ public class ChooseAreaFragment extends Fragment {
 
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT * FROM County WHERE city_id = ?", new String[]{String.valueOf(selectedCity.getId())});
+        Log.d(TAG, "Cursor column count: " + cursor.getColumnCount()); // 打印列数
         if (cursor != null) {
             while (cursor.moveToNext()) {
                 County county = new County();
                 county.setId(cursor.getInt(cursor.getColumnIndex("id")));
                 county.setCountyName(cursor.getString(cursor.getColumnIndex("county_name")));
+                county.setWeatherId(cursor.getString(cursor.getColumnIndex("weather_id")));
                 countyList.add(county);
                 dataList.add(county.getCountyName());
-                Log.d(TAG, "queryCounties: 99999999999999999999999999999999999 county.getCountyName()");
+                //Log.d(TAG, "queryCounties: 99999999999999999999999999999999999 county.getCountyName()");
             }
             cursor.close();
         }

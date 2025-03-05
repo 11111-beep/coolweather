@@ -4,6 +4,9 @@ import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
+import com.example.coolweather.gson.Weather;
+import com.google.gson.Gson;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -56,6 +59,7 @@ public class Utility {
                     ContentValues values = new ContentValues();
                     values.put("county_name", countyObject.getString("name"));
                     values.put("county_code", countyObject.getInt("id"));
+                    values.put("weather_id", countyObject.getString("weather_id"));
                     values.put("city_id", cityId);
                     db.insert("County", null, values);
                 }
@@ -65,5 +69,18 @@ public class Utility {
             }
         }
         return false;
+    }
+
+    public static Weather handleWeatherResponse(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            // 直接返回 Weather 对象，而不调用 toString()
+            return new Gson().fromJson(weatherContent, Weather.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

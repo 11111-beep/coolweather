@@ -17,11 +17,11 @@ public class County {
     public void setCountyName(String countyName) {
         this.countyName = countyName;
     }
-    public String getweatherId(){
+    public String getWeatherId(){
         return weatherId;
     }
 
-    public void setweatherId(String weatherId){
+    public void setWeatherId(String weatherId){
         this.weatherId = weatherId;
     }
     public int getCityId(){
